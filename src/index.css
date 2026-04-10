@@ -1,0 +1,112 @@
+@import "tailwindcss";
+@import 'tailwind-scrollbar-hide/v4';
+@plugin "daisyui";
+
+html{
+  scroll-behavior: smooth;
+}
+
+@theme {
+    /* themes: light --default; */
+    --font-sans: "Whitney-Semibold", ui-sans-serif, system-ui, sans-serif;
+}
+
+@font-face {
+  font-family: 'Whitney-Medium';
+  src: local('Whitney-Medium')
+}
+@font-face {
+  font-family: 'Whitney-Semibold';
+  src: local('Whitney-Semibold')
+}
+@font-face {
+  font-family: 'Whitney-Bold';
+  src: local('Whitney-Bold')
+}
+@font-face {
+  font-family: 'Whitney-Book';
+  src: local('Whitney-Book')
+}
+@font-face {
+  font-family: 'Whitney-Light';
+  src: local('Whitney-Light')
+}
+
+@plugin "daisyui/theme" {
+    name: "light";
+    default: true;
+
+    /* Base background and text */  
+    --color-base-100: #f1f1f1;   
+    --color-base-200: #FBF9F6;  /*cardbg*/ 
+    --color-base-300: #F3EEE7;  /*bg*/     
+    --color-base-content: #676767; 
+
+    /* Primary */
+    --color-primary: #D44A1B;          
+    --color-primary-focus: #D44A1B;    
+    --color-primary-content: #000000;
+
+    /* Secondary */
+    --color-secondary: #EB8F51;          
+    --color-secondary-focus: #F59F65;    
+    --color-secondary-content: #ffffff;
+
+    /* Neutral: Gray for secondary/primary text */
+    --color-neutral: #505050;
+    --color-neutral-focus: #000000;
+    --color-neutral-content: #ffffff;
+
+    /* Status colors */
+    --color-info: #4285F4;
+    --color-success: #42B72A;
+    --color-warning: #F7B928;
+    --color-error: #CF0000;
+
+
+
+}
+
+/*CALENDAR*/
+@import 'react-day-picker/style.css';
+
+.rdp-root {
+  position: relative; 
+  margin: 0 !important;
+  --rdp-today-color: #D44A1B;
+  --rdp-accent-color: #D44A1B;
+  --rdp-accent-background-color: #D44A1B;
+  --rdp-background-color: rgba(244, 215, 208, 0.5);
+  --rdp-range_middle-background-color: rgba(244, 215, 208, 0.5);
+  --rdp-range_middle-color: #D44A1B;
+}
+
+.rdp-caption_label {/*Month name*/
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  width: 100%;
+  padding: 0 40px;
+}
+
+.rdp-nav {
+  position: absolute;
+  top: 0px; 
+  left: 2px; 
+  right: 2px;
+  display: flex;
+  justify-content: space-between; 
+  pointer-events: none; 
+}
+
+.rdp-nav button {
+  position: relative; 
+  z-index: 50;/*make it on top of month name so the button can work*/
+  pointer-events: auto;
+  cursor: pointer; 
+}
+
+.rdp-caption {
+  display: flex;
+  justify-content: center;
+}
