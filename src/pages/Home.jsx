@@ -11,6 +11,7 @@ import PhuketImg from '../assets/cityimg/Phuket.jpg'
 import SuratImg from '../assets/cityimg/Suratthani.jpg'
 
 // import Todlong from '../components/TODLONG/TodLong'
+//test
 
 import {
   animate,
