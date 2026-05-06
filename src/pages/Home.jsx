@@ -1,6 +1,6 @@
 import homeBg from '../assets/homebg.png'
 import { NavLink } from 'react-router'
-import ReviewCard from '../components/cardCPN/reviewCard'
+import ReviewCard from '../components/cardCPN/ReviewCard'
 import { LeftLogo, RightLogo } from '../icons'
 import BKKImg from '../assets/cityimg/Bangkok.jpg'
 import CMImg from '../assets/cityimg/Chiang Mai.jpg'
