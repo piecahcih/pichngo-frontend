@@ -35,7 +35,7 @@ function GuestHeader() {
 
       <NavLink to="/"><div className="text-[#D44A1B] whitespace-nowrap text-[16px] md:text-[24px] lg:text-[32px] tracking-[2.8px]">Pich & Go</div></NavLink>
 
-        {!isSearchExpanded && <div onClick={()=>setIsSearchExpanded(true)} className={`pl-30 transition-opacity duration-300 ${isTransparent ? 'opacity-0 pointer-events-none': 'opacity-100'}`}>
+        {!isSearchExpanded && <div onClick={()=>setIsSearchExpanded(false)} className={`pl-30 transition-opacity duration-300 ${isTransparent ? 'opacity-0 pointer-events-none': 'opacity-100'}`}>
           <SearchBarNav/>
         </div>}
 

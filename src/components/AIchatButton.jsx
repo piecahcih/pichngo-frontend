@@ -120,7 +120,7 @@ const AIchatButton = () => {
                                     >
                                         <div className="relative h-32 overflow-hidden">
                                             <img 
-                                                src={chat.hotel.hotelImg?.[0].img1 || 'https://via.placeholder.com/400x200?text=Luxury+Stay'} 
+                                                src={chat.hotel.hotelImg?.[0]?.img1 || 'https://via.placeholder.com/400x200?text=Luxury+Stay'} 
                                                 alt={chat.hotel.name}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                             />

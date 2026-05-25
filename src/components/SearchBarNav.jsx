@@ -46,7 +46,6 @@ function SearchBarNav() {
         <form className="flex border border-base-content bg-neutral-content text-neutral rounded-[12px] h-[40px] items-center font-['Whitney-Book'] text-[14px]">
             <input type="text" placeholder={ dismantleSlug(hotelname || city) || 'Where to?' } 
               className="h-full rounded-l-[12px] w-[140px] p-3 text-neutral placeholder:text-neutral/60 outline-none truncate"/>
-              {/* The magic of the truncate class is that it automatically applies three CSS rules at once: overflow: hidden, white-space: nowrap, and text-overflow: ellipsis. */}
             <input type="text" placeholder={(checkin && checkout) ? `${checkin}-${checkout}` : 'Add dates'} 
             className="h-full w-[120px] border-x text-center text-neutral placeholder:text-neutral/60 outline-none" />
             <button type='button' className="h-full flex items-center justify-center text-neutral/60">
