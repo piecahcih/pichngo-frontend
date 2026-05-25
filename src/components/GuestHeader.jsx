@@ -30,6 +30,14 @@ function GuestHeader() {
   const isTransparent = isHome && !isScrolled
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
 
+  const hdlGoSearch = () => {
+      window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }
+  
   return (
     <div>
       <div className={` transition-all duration-300 h-[80px] px-10 flex justify-between items-center ${
