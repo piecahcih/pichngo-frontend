@@ -10,7 +10,7 @@ const AIchatButton = () => {
     const [chatHistory, setChatHistory] = useState([
         { role: 'ai', text: 'Welcome to Pich & Go. I am Pichy, your dedicated concierge. How may I assist you with your luxury travel plans today?' }
     ]);
-    // console.log('chatHistory', chatHistory)
+    console.log('chatHistory', chatHistory)
 
     const today = new Date();
     const checkinStr = format(today, "yyyy-MM-dd");             
@@ -51,10 +51,8 @@ const AIchatButton = () => {
                 aiData = { aiMessage: response.data.aiAnswer, hotel: null };
             }
 
-            // Add the text message first
             setChatHistory(prev => [...prev, { role: 'ai', text: aiData.aiMessage }]);
 
-            // If there's a hotel recommendation, add it as a separate message/card
             if (aiData.hotel) {
                 setChatHistory(prev => [...prev, { role: 'ai', hotel: aiData.hotel }]);
             }
@@ -120,7 +118,7 @@ const AIchatButton = () => {
                                     >
                                         <div className="relative h-32 overflow-hidden">
                                             <img 
-                                                src={chat.hotel.hotelImg?.[0]?.img1 || 'https://via.placeholder.com/400x200?text=Luxury+Stay'} 
+                                                src={chat.hotel.hotelImg?.img1 || 'https://via.placeholder.com/400x200?text=Luxury+Stay'} 
                                                 alt={chat.hotel.name}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                             />
