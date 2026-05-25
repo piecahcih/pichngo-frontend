@@ -1,16 +1,15 @@
-import { useState } from 'react'
 import ImgMockCard from '../../assets/hotelcardimgmock.png'
 import { HeartLineLogo, HeartLogo, StarLogo } from '../../icons'
 import useHotelStore from '../../stores/hotelStore'
 import useUserStore from '../../stores/userStore'
-import { toast } from 'react-toastify'
 import { motion } from 'motion/react'
 import { LoginSwal } from '../swal/LoginAlert'
 import { useNavigate } from 'react-router';
-import { formatPrice } from '../../utils/formatNum'
+import { useFormatPrice } from '../../utils/formatNum'
 
 
 function HotelCard({hotel}) {
+    const formatPrice = useFormatPrice()
     const user = useUserStore(st => st.user)
     const createLike = useHotelStore(st => st.createLike)
     const unLike = useHotelStore(st => st.unLike)
@@ -18,6 +17,12 @@ function HotelCard({hotel}) {
     const navigate = useNavigate()
 
     const haveLike = hotel.likes?.some(el => el.userId === user?.id)
+
+    
+    const reviewCount   = hotel.reviewCount   ?? 0
+    const averageRating = hotel.averageRating != null
+        ? Number(hotel.averageRating).toFixed(1)
+        : '0.0'
 
     const hdlLikeClick = async (e) => {
         e.preventDefault()
@@ -45,8 +50,8 @@ function HotelCard({hotel}) {
             <p className='font-[Whitney-Book] text-[14px] leading-4.5'>{hotel.city}</p>
             <div className="flex gap-1 items-center font-[Whitney-Book]">
                 <StarLogo className="h-[14px] text-secondary"/>
-                <p className='text-[14px]'>4.8</p>
-                <p className='text-[12px]'>(4 Reviews)</p>
+                <p className='text-[14px]'>{averageRating}</p>
+                <p className='text-[12px]'>({reviewCount} Review{reviewCount !== 1 ? 's' : ''})</p>
             </div>
             <div className='flex items-end mt-7'>
                 <div className="flex flex-col">

@@ -1,4 +1,4 @@
-import { AddTravelerApi, DeleteAccApi, DeleteTravelerApi, EditAccApi, EditTravelerInfoApi, GetTravelerInfoApi, mainAPI } from "../api/mainAPI"
+import { AddTravelerApi, DeleteAccApi, DeleteTravelerApi, EditAccApi, EditTravelerInfoApi, GetTravelerInfoApi, LoginApi, RegisterLoginWithGoogleApi } from "../api/mainAPI"
 import { create } from "zustand";
 import { createJSONStorage, persist } from 'zustand/middleware'
 
@@ -8,13 +8,19 @@ const useUserStore = create(persist((set, get) => ({
     travelerInfo: [],
     rememberMe: false,
     login: async (body) => {
-        const res = await mainAPI.post('/auth/login', body)
-        // console.log("user",res)
+        const res = await LoginApi(body)
+        console.log("user",res)
         set({ token: res.data.token, user: res.data.user, rememberMe: body.rememberMe })
         
         await get().getTravelerInfo()
 
         return res
+    },
+    registerorLoginWithGoogle: async (idToken, userData) => {
+        const res = await RegisterLoginWithGoogleApi(idToken, userData)
+        set({ token: res.data.token, user: res.data.user})
+        await get().getTravelerInfo()
+        return res;
     },
     logout: () => {
         set({ token: '', user: null, travelerInfo: [] })

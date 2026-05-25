@@ -1,23 +1,14 @@
 import { differenceInDays, formatDate, subDays } from "date-fns"
 import { useNavigate } from "react-router"
-import { formatPrice } from "../../utils/formatNum"
-import useBookingStore from "../../stores/bookingStore"
+import { useFormatPrice } from "../../utils/formatNum"
 import { SuccessLogo } from "../../icons"
 
-function BSuccess({bk}) {
-  const booking = useBookingStore(st=>st.booking)
+function BSuccess({bk,bkp,bkg}) {
+  const formatPrice = useFormatPrice()
   const navigate = useNavigate()
 
 
   return (
-    <div className="">
-      <div className="max-w-[800px] mx-auto pt-12 -mb-10 flex flex-col justify-between items-center">
-        <SuccessLogo className="w-15 text-primary"/>
-        <h1 className="text-neutral text-[26px] font-[Whitney-Bold]">You successfully created your booking</h1>
-        <button onClick={()=>navigate('/account/bookings')} className="underline hover:text-primary">Go to your booking history</button>
-
-      </div>
-
       <div className="max-w-[800px] mx-auto my-20 bg-base-200 shadow-lg font-sans text-[#333]">
             {/* Header Section */}
             <div className="p-6 flex justify-between items-center">
@@ -66,7 +57,7 @@ function BSuccess({bk}) {
               {/* Left: Price */}
               <div className="w-1/3 p-6 border-r border-blue-100">
                 <h3 className="font-bold text-lg mb-4">Price Details</h3>
-                <p className="text-xs text-gray-500">{booking.paymentDetails.paymentMethod}</p>
+                <p className="text-xs text-gray-500">{bkp.paymentMethod}</p>
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl font-bold">{formatPrice(bk.finalPrice,2)}</span>
                   <span className="text-[10px] border border-primary text-primary px-1 rounded">Paid</span>
@@ -80,7 +71,7 @@ function BSuccess({bk}) {
                 
                 <div className="mt-4">
                   <p className="text-[10px] text-gray-400 uppercase">Guest Names</p>
-                  <p className="text-sm font-[Whitney-Medium] leading-4">{booking.guestList.map(item=> `${item.firstName} ${item.lastName}`).join(", ")}</p>
+                  <p className="text-sm font-[Whitney-Medium] leading-4">{bkg.map(item=> `${item.firstName} ${item.lastName}`).join(", ")}</p>
                 </div>
 
                 <div className="mt-4 flex gap-10">
@@ -138,7 +129,6 @@ function BSuccess({bk}) {
                           <pre>ar{Array.isArray(booking).toString()}</pre> */}
       </div>
 
-    </div>
   )
 }
 

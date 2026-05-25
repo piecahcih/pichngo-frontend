@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react'
 import QRPayment from '../../assets/QRPayment.png'
 import useBookingStore from '../../stores/bookingStore'
 import { InfoIcon } from '../../icons'
-import { formatPrice } from '../../utils/formatNum'
+import { useFormatPrice } from '../../utils/formatNum'
+import { CardElement } from '@stripe/react-stripe-js' 
+import { PaymentElement } from '@stripe/react-stripe-js'
 
 function BPayment() {
+    const formatPrice = useFormatPrice()
     const paymentMethod = useBookingStore(st=>st.paymentMethod)
     const setPaymentMethod = useBookingStore(st=>st.setPaymentMethod)
     console.log('paymentMethod', paymentMethod)
@@ -14,7 +17,7 @@ function BPayment() {
         setPaymentMethod(name)
     }
 
-const inputStyle = "w-full h-[60px] px-4 border border-neutral/50 rounded-[4px] text-[17px] outline-none focus:border-blue-500 transition-all placeholder:text-neutral placeholder:font-[Whitney-Book]";
+const inputStyle = "w-full h-[45px] px-4 border border-neutral/50 rounded-[4px] text-[17px] outline-none focus:border-blue-500 transition-all placeholder:text-neutral placeholder:font-[Whitney-Book]";
   return (
     <div className='bg-base-200 w-[40vw] h-fit rounded-[12px] p-6 flex flex-col'>
         <h1 className="text-[24px]">Payment</h1>
@@ -25,48 +28,12 @@ const inputStyle = "w-full h-[60px] px-4 border border-neutral/50 rounded-[4px] 
                 <p>CREDIT/DEBIT CARD</p>
             </div>            
             {paymentMethod === 'CREDIT_CARD' && (
-                <div className="flex flex-col gap-4 w-full max-w-[700px] p-6">
-                    
-                    {/* 1. Bank card no. */}
-                    <div className="w-full">
-                        <input 
-                        type="text" 
-                        placeholder="Bank card no." 
-                        className={inputStyle} 
-                        />
+                <div className="my-4 p-6 bg-white rounded-xl border border-neutral/20 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="mb-4 flex items-center gap-2 text-neutral/60">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        <span className="text-[12px] uppercase tracking-wider font-bold">Secure Card Entry</span>
                     </div>
-
-                    {/* 2. Cardholder name */}
-                    <div className="w-full">
-                        <input 
-                        type="text" 
-                        placeholder="Cardholder name" 
-                        className={inputStyle} 
-                        />
-                    </div>
-
-                    {/* 3. Bottom Row (Exp Date & CVV) */}
-                    <div className="flex gap-4 w-full relative">
-                        <div className="flex-1">
-                        <input 
-                            type="text" 
-                            placeholder="Expiration date" 
-                            className={inputStyle} 
-                        />
-                        </div>
-                        
-                        <div className="flex-1 relative">
-                        <input 
-                            type="text" 
-                            placeholder="CVV/CVC" 
-                            className={inputStyle} 
-                        />
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
-                            <InfoIcon className="w-5"/>
-                        </div>
-                        </div>
-                    </div>
-
+                    <PaymentElement options={{ layout: 'tabs' }} />
                 </div>
             )}
         </div>
@@ -77,7 +44,7 @@ const inputStyle = "w-full h-[60px] px-4 border border-neutral/50 rounded-[4px] 
                 <p>BANK TRANSFER</p>
             </div> 
             {paymentMethod === 'BANK_TRANSFER' && (
-                <div className="flex flex-col gap-4 w-full max-w-[700px] p-6">
+                <div className="flex flex-col gap-4 w-full max-w-[700px] my-4 p-6 bg-white rounded-xl border border-neutral/20 animate-in fade-in slide-in-from-top-2 duration-300">
                     
                     {/* 1. Bank card no. */}
                     <div className="w-full">
@@ -126,7 +93,7 @@ const inputStyle = "w-full h-[60px] px-4 border border-neutral/50 rounded-[4px] 
                 <p>QR PAYMENT</p>
             </div>
             {paymentMethod === 'QR_PAYMENT' && ( 
-                <div className="pl-8 pt-4">
+                <div className="pl-8 my-4">
                     <img src={QRPayment} alt="QRPayment" className='h-100 w-fit' />
                 </div>
             )}

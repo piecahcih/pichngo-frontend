@@ -2,14 +2,16 @@ import { useNavigate, useSearchParams } from "react-router"
 import useUserStore from "../../stores/userStore"
 import { toast } from "react-toastify"
 import { LoginSwal } from "../swal/LoginAlert"
-import { formatPrice } from "../../utils/formatNum"
+import { useFormatPrice } from "../../utils/formatNum"
 import useBookingStore from "../../stores/bookingStore"
 import { differenceInDays } from "date-fns"
 
 function RoomCard({room}) {
+    const formatPrice = useFormatPrice()
     const user = useUserStore(st=>st.user)
     const navigate = useNavigate()
     const[searchParams] = useSearchParams()
+    console.log('room', room)
 
     const roomAmn = searchParams.get("room")
     const checkin = searchParams.get("checkin")
@@ -35,6 +37,7 @@ function RoomCard({room}) {
         }
 
         await useBookingStore.getState().setCurrentBooking(data)
+        await useBookingStore.getState().resetPromoCode()
 
         navigate(`/book`)
         // navigate(`/book?${searchParams}&roomId=${room.id}`)
@@ -44,29 +47,42 @@ function RoomCard({room}) {
     <div className="border border-base-content rounded-[12px] flex p-5 justify-between items-end">
         <div className="flex gap-5">
             <img src={room.roomImg} alt="room picture" className="w-[250px] h-fit rounded-[5px]" />
-            <div>
-                <h3 className="text-[20px]">{room.roomType}</h3>
-                <div className="font-[Whitney-Book] text-[14px] flex gap-2">
-                    <p> {room.roomSize} m<sup>2</sup> </p>
-                    <hr className="w-[1px] h-6 bg-gray-400 border-0" />
-                    <p>Max {room.maxAdults} adults</p>
-                    <hr className="w-[1px] h-6 bg-gray-400 border-0" />
-                    <p>Max {room.maxChildren} childrens</p>
-                    <hr className="w-[1px] h-6 bg-gray-400 border-0" />
-                    <p>{room.bedSetup}</p>  
+            <div className="flex flex-col justify-between">
+                <div>
+                    <h3 className="text-[20px]">{room.roomType}</h3>
+                    <div className="font-[Whitney-Book] text-[14px] flex gap-2">
+                        <p> {room.roomSize} m<sup>2</sup> </p>
+                        <hr className="w-[1px] h-6 bg-gray-400 border-0" />
+                        <p>Max {room.maxAdults} adults</p>
+                        <hr className="w-[1px] h-6 bg-gray-400 border-0" />
+                        <p>Max {room.maxChildren} childrens</p>
+                        <hr className="w-[1px] h-6 bg-gray-400 border-0" />
+                        <p>{room.bedSetup}</p>  
+                    </div>
                 </div>
+                {room.availableCount > 0 && <p className="font-[Whitney-Book] text-[14px]">Available Room: {room.availableCount}</p>}
             </div>
         </div>
             {/* <pre>searchpr:{searchParams}</pre> */}
         <div className="flex gap-6 items-center">
             <div className="flex flex-col items-end">
                 <div className="flex flex-col items-end pb-1.5">
-                    <h3 className="text-[20px]">{formatPrice(room.nightlyRate)}</h3>
-                    <p className="font-[Whitney-Book] text-[12px] leading-1">Total price:{formatPrice(room.nightlyRate*(nightCount||1))}</p>    
+                    <h3 className={`text-[20px] ${room.isFull ? 'text-neutral/40' : ''}`}>{formatPrice(room.nightlyRate)}</h3>
+                    <p className="font-[Whitney-Book] text-[12px] whitespace-nowrap leading-1">Total price:{formatPrice(room.nightlyRate*(nightCount||1))}</p>    
                 </div>
-                <p className="font-[Whitney-Book] text-[12px]">Price before taxes</p>    
+                <p className="font-[Whitney-Book] text-[12px] leading-2">Price before taxes</p>    
             </div>
-            <button onClick={hdlReserve} className="bg-primary text-white px-6 py-1.5 rounded-[20px] text-[20px] h-fit">Reserve</button>
+
+            <div className="flex flex-col">
+                {room.isFull && <p className="text-error font-[Whitney-Medium] text-[14px] text-end mb-1 -mt-5">Fully Booked!</p>}
+                <button 
+                    onClick={hdlReserve} 
+                    disabled={room.isFull}
+                    className={`${room.isFull ? 'bg-neutral/40 cursor-not-allowed' : 'bg-primary hover:bg-[#b5390e]'} text-white px-6 py-1.5 rounded-[20px] text-[20px] w-30 h-fit transition-all`}
+                    >
+                    {room.isFull ? "Full" : "Reserve"}
+                </button>
+            </div>
         </div>
     </div>
   )

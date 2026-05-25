@@ -2,6 +2,7 @@ import { BrowserRouter, RouterProvider } from "react-router"
 import { adminRouter, guestRouter, userRouter } from "./router/router"
 import { ToastContainer } from "react-toastify";
 import useUserStore from "./stores/userStore";
+import useCurrencyStore from "./stores/currencyStore";
 import { Suspense, useEffect } from "react";
 
 
@@ -9,9 +10,14 @@ function App() {
   // const user = null
   // const user = { email: 'peach@gmail.com'}
   const user = useUserStore(st=>st.user)
+  const fetchRates = useCurrencyStore(st=>st.fetchRates)
   // const finalRouter = user ? userRouter : guestRouter ;
   // const finalRouter = user.role === 'ADMIN' ? adminRouter : user ? userRouter : guestRouter ;
   const finalRouter = !user ? guestRouter : user.role === 'ADMIN' ? adminRouter : userRouter ;
+
+  useEffect(()=>{
+    fetchRates()
+  }, [fetchRates])
 
   useEffect(()=>{
     const { user, rememberMe, logout } = useUserStore.getState();

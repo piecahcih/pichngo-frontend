@@ -1,5 +1,5 @@
 import homeBg from '../assets/homebg.png'
-import { NavLink } from 'react-router'
+import { Link, NavLink } from 'react-router'
 import ReviewCard from '../components/cardCPN/ReviewCard'
 import { LeftLogo, RightLogo } from '../icons'
 import BKKImg from '../assets/cityimg/Bangkok.jpg'
@@ -9,20 +9,13 @@ import KrabiImg from '../assets/cityimg/Krabi.jpg'
 import KhaoyaiImg from '../assets/cityimg/Nakhon Ratchasima.jpg'
 import PhuketImg from '../assets/cityimg/Phuket.jpg'
 import SuratImg from '../assets/cityimg/Suratthani.jpg'
-
-// import Todlong from '../components/TODLONG/TodLong'
-//test
-
-import {
-  animate,
-  motion,
-  useMotionValue,
-  useMotionValueEvent,
-  useScroll
-} from "motion/react"
+import { animate, motion, useMotionValue, useMotionValueEvent, useScroll} from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import useHotelStore from '../stores/hotelStore'
+import useDiscountStore from '../stores/discountStore'
+import useReviewStore from '../stores/reviewStore'
 import SearchBarHome from '../components/SearchBarHome'
+import DiscountCard from '../components/cardCPN/DiscountCard'
 
 
 function Home() {
@@ -43,17 +36,32 @@ function Home() {
   const [isAtStart, setIsAtStart] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
 
-  const hotelCounts = useHotelStore(st=>st.hotelCounts)
-  const getHotelCounts = useHotelStore(st=>st.getHotelCountsByCity)
-  const getAllHotels = useHotelStore(st=>st.getAllHotels)
+  const hotelCounts = useHotelStore(st => st.hotelCounts)
+  const getHotelCounts = useHotelStore(st => st.getHotelCountsByCity)
+  const getAllHotels = useHotelStore(st => st.getAllHotels)
 
-  useEffect(()=>{
+  const discounts = useDiscountStore(st => st.discounts)
+  const getDiscounts = useDiscountStore(st => st.getDiscounts)
+  console.log('discounts', discounts)
+
+  const reviews = useReviewStore(st => st.reviews)
+  const getReviews = useReviewStore(st => st.getReviews)
+
+  useEffect(() => {
     getHotelCounts()
-  },[getHotelCounts])
-  useEffect(()=>{
+  }, [getHotelCounts])
+  useEffect(() => {
     getAllHotels()
-  },[getAllHotels])
-  
+  }, [getAllHotels])
+
+  useEffect(() => {
+    getDiscounts()
+  }, [getDiscounts])
+
+  useEffect(() => {
+    getReviews()
+  }, [getReviews])
+
 
   const getCountForCity = (slug) => {
     const cityNameWithSpaces = slug.replaceAll('-', ' ');
@@ -66,12 +74,8 @@ function Home() {
   const handleScroll = () => {
     if (scrollRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      
-      // Check if we are at the beginning
+
       setIsAtStart(scrollLeft <= 10);
-      
-      // Check if we reached the end (scrollWidth - clientWidth is the max scroll possible)
-      // We subtract 5-10px as a "buffer" for different zoom levels
       setIsAtEnd(scrollLeft + clientWidth >= scrollWidth - 10);
     }
   };
@@ -84,6 +88,48 @@ function Home() {
     }
   };
 
+  const discountScrollRef = useRef(null);
+  const { scrollXProgress: discountScrollXProgress } = useScroll({ container: discountScrollRef })
+  const discountMaskImage = useScrollOverflowMask(discountScrollXProgress)
+  const [isDiscountAtStart, setIsDiscountAtStart] = useState(true);
+  const [isDiscountAtEnd, setIsDiscountAtEnd] = useState(false);
+
+  const handleDiscountScroll = () => {
+    if (discountScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = discountScrollRef.current;
+      setIsDiscountAtStart(scrollLeft <= 10);
+      setIsDiscountAtEnd(scrollLeft + clientWidth >= scrollWidth - 10);
+    }
+  };
+
+  const scrollDiscount = (direction) => {
+    if (discountScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -300 : 300;
+      discountScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  const reviewScrollRef = useRef(null);
+  const { scrollXProgress: reviewScrollXProgress } = useScroll({ container: reviewScrollRef })
+  const reviewMaskImage = useScrollOverflowMask(reviewScrollXProgress)
+  const [isReviewAtStart, setIsReviewAtStart] = useState(true);
+  const [isReviewAtEnd, setIsReviewAtEnd] = useState(false);
+
+  const handleReviewScroll = () => {
+    if (reviewScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = reviewScrollRef.current;
+      setIsReviewAtStart(scrollLeft <= 10);
+      setIsReviewAtEnd(scrollLeft + clientWidth >= scrollWidth - 10);
+    }
+  };
+
+  const scrollReview = (direction) => {
+    if (reviewScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -300 : 300;
+      reviewScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   const [clickData, setClickData] = useState({
     destination: "",
     isOpen: false
@@ -91,9 +137,12 @@ function Home() {
   const hdlDestinationClick = (cityName) => {
     setClickData({ destination: cityName, isOpen: true })
     // console.log(cityName)
-    window.scrollTo({top: 0, behavior: 'smooth'})
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
   // console.log('clickDataHome', clickData)
+
+  const filterReviews = reviews.filter(review => review.reviewImg != null)
+  console.log('filterReviews', filterReviews)
 
   return (
     <div className="bg-white min-h-screen min-w-screen flex flex-col">
@@ -110,83 +159,103 @@ function Home() {
         <div className='mb-8 flex items-center justify-between'>
           <div>
             <h1 className='text-[26px] font-[Whitney-Bold]'>Top destinations in Thailand</h1>
-            <p className='text-[16px] font-[Whitney-Medium]'>See all destinations in Thailand →</p>
+            {/* <p className='text-[16px] font-[Whitney-Medium]'>See all destinations in Thailand →</p> */}
           </div>
           <div className='flex gap-4'>
             <button onClick={() => scroll('left')} disabled={isAtStart}
-            className="border rounded-[12px] border-base-content p-2 w-fit h-fit disabled:opacity-30">
+              className="border rounded-[12px] border-base-content p-2 w-fit h-fit disabled:opacity-30">
               <LeftLogo className="w-8" />
             </button>
             <button onClick={() => scroll('right')} disabled={isAtEnd}
-            className="border rounded-[12px] border-base-content p-2 w-fit h-fit disabled:opacity-30">
+              className="border rounded-[12px] border-base-content p-2 w-fit h-fit disabled:opacity-30">
               <RightLogo className="w-8" />
             </button>
           </div>
         </div>
 
         <div>
-              <motion.ul ref={scrollRef} style={{ maskImage }} onScroll={handleScroll}
-              className="flex gap-8 overflow-x-auto overflow-y-hidden scrollbar-hide scroll-smooth" >
-                {destinations.map(el => {
-                  const exactCount = getCountForCity(el.slug);
-                  return(
-                      <div key={el.name} onClick={()=>hdlDestinationClick(el.name)}
-                        className="flex-none transition-transform hover:scale-[1.02]">
-                        <img src={el.img} alt={el.name} className='rounded-[12px] w-[264px] h-[264px] object-cover'/>
-                        <div className="mt-4 mx-2">
-                          <h2>{el.name}</h2>
-                          <p className='font-[Whitney-Book] text-[14px]'>
-                            {exactCount} {exactCount === 1 ? 'accommodation' : 'accommodations'}
-                          </p>
-                        </div>
-                      </div>
-
-                  )
-                })}
-              </motion.ul>
-        </div>
-
-        {/* <div ref={scrollRef} className="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth 
-        [mask-image:linear-gradient(to_right,black_95%,transparent_100%)]">
-          {destinations.map(el => (
-                <NavLink to="/hotels/city" key={el.name}
+          <motion.ul ref={scrollRef} style={{ maskImage }} onScroll={handleScroll}
+            className="flex gap-8 overflow-x-auto overflow-y-hidden scrollbar-hide scroll-smooth" >
+            {destinations.map(el => {
+              const exactCount = getCountForCity(el.slug);
+              return (
+                <div key={el.name} onClick={() => hdlDestinationClick(el.name)}
                   className="flex-none transition-transform hover:scale-[1.02]">
-                  <img src={el.img} alt={el.name} className='rounded-[12px] w-[264px] h-[264px] object-cover'/>
+                  <img src={el.img} alt={el.name} className='rounded-[12px] w-[264px] h-[264px] object-cover' />
                   <div className="mt-4 mx-2">
                     <h2>{el.name}</h2>
-                    <p className='font-[Whitney-Book] text-[14px]'>000 accommodations</p>
+                    <p className='font-[Whitney-Book] text-[14px]'>
+                      {exactCount} {exactCount === 1 ? 'accommodation' : 'accommodations'}
+                    </p>
                   </div>
-                </NavLink>
-          ))}
-        </div> */}
+                </div>
+
+              )
+            })}
+          </motion.ul>
+        </div>
+
 
       </div>
-      <div className="mx-[10%] my-25 text-primary-content">
+
+      <div className="mx-[10%] mt-20 text-primary-content">
         <div className='mb-8 flex items-center justify-between'>
           <div>
-            <h1 className='text-[26px] font-[Whitney-Bold]'>The Art of Going</h1>
-            <p className='text-[16px] font-[Whitney-Medium]'>Curated by Us, Rated by You →</p>
+            <h1 className='text-[26px] font-[Whitney-Bold]'>Promotions</h1>
           </div>
 
           <div className='flex gap-4'>
-            <div className="border rounded-[12px] border-base-content p-2 w-fit h-fit">
+            <button onClick={() => scrollDiscount('left')} disabled={isDiscountAtStart} className="border rounded-[12px] border-base-content p-2 w-fit h-fit disabled:opacity-30">
               <LeftLogo className="w-8" />
-            </div>
-            <div className="border rounded-[12px] border-base-content p-2 w-fit h-fit">
+            </button>
+            <button onClick={() => scrollDiscount('right')} disabled={isDiscountAtEnd} className="border rounded-[12px] border-base-content p-2 w-fit h-fit disabled:opacity-30">
               <RightLogo className="w-8" />
-            </div>
+            </button>
           </div>
         </div>
 
 
-        <ReviewCard />
+        <div>
+          <motion.div ref={discountScrollRef} style={{ maskImage: discountMaskImage }} onScroll={handleDiscountScroll} className="flex gap-8 overflow-x-auto overflow-y-hidden scrollbar-hide scroll-smooth py-4">
+            {discounts?.map(discount => (
+              <DiscountCard key={discount.id || discount.code} discount={discount} />
+            ))}
+          </motion.div>
+        </div>
 
 
       </div>
 
-      <div className="text-center p-4">
+      <div className="mx-[10%] my-20 text-primary-content">
+        <div className='mb-8 flex items-center justify-between'>
+          <div>
+            <h1 className='text-[26px] font-[Whitney-Bold]'>The Art of Going</h1>
+            <Link to='/reviews' className='text-[16px] font-[Whitney-Medium] hover:underline'>Curated by Us, Rated by You. Discover more reviews →</Link>
+          </div>
+
+          <div className='flex gap-4'>
+            <button onClick={() => scrollReview('left')} disabled={isReviewAtStart} className="border rounded-[12px] border-base-content p-2 w-fit h-fit disabled:opacity-30">
+              <LeftLogo className="w-8" />
+            </button>
+            <button onClick={() => scrollReview('right')} disabled={isReviewAtEnd} className="border rounded-[12px] border-base-content p-2 w-fit h-fit disabled:opacity-30">
+              <RightLogo className="w-8" />
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <motion.div ref={reviewScrollRef} style={{ maskImage: reviewMaskImage }} onScroll={handleReviewScroll} className="flex gap-8 overflow-x-auto overflow-y-hidden scrollbar-hide scroll-smooth py-4">
+            {filterReviews?.slice(0, 10).map((review, i) => (
+              <ReviewCard key={review.id || i} review={review} />
+            ))}
+          </motion.div>
+        </div>
+
+      </div>
+
+      {/* <div className="text-center p-4">
         <button onClick={()=> getAllHotels()} className='bg-primary text-center text-white p-4'>GetAllHotels</button>
-      </div>
+      </div> */}
 
     </div>
   )

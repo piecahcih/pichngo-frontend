@@ -3,6 +3,7 @@ import LikeCard from '../components/cardCPN/LikeCard'
 import useHotelStore from '../stores/hotelStore'
 import useUserStore from '../stores/userStore'
 import { useEffect } from 'react'
+import { HeartLineLogo } from '../icons'
 
 function MyList() {
   // const user = useUserStore(st=>st.user)
@@ -29,16 +30,21 @@ function MyList() {
           <p className='text-[16px] font-[Whitney-Medium] leading-1'>waiting to be experience</p>
         </div>
 
-        <div>
+        {myLists?.length > 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8 my-8">
-            {/* <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 my-8"> */}
-            {myLists?.map(hotel => (
-              <NavLink key={hotel.id} to={`/hotels/${createSlug(hotel.city)}/${createSlug(hotel.name)}`}>
-                <LikeCard hotel={hotel} />
-              </NavLink>
-            ))}
+              {myLists?.map(hotel => (
+                <NavLink key={hotel.id} to={`/hotels/${createSlug(hotel.city)}/${createSlug(hotel.name)}`}>
+                  <LikeCard hotel={hotel} />
+                </NavLink>
+              ))}
           </div>
-        </div>
+        ):(
+          <div className="w-[80vw] flex flex-col items-center justify-center my-32 text-neutral/50 opacity-40">
+            <HeartLineLogo className="w-24 h-24"/>
+            <h2 className="text-[22px] font-[Whitney-Bold] text-neutral/70">You haven't like any properties yet.</h2>
+          </div>
+        )}
+
 
       </div>
     </div>

@@ -24,6 +24,8 @@ import ProfileTravelers from "../pages/ProfileTravelers";
 import AllWaitingBookings from "../pages/Admin/AllWaitingBooking";
 import AllCancelBookings from "../pages/Admin/AllCancelBookings";
 import AllConfirmBookings from "../pages/Admin/AllConfirmBookings";
+import ReviewDetails from "../pages/ReviewDetails";
+import Reviews from "../pages/Reviews";
 
 const guestRouter = createBrowserRouter([
     {
@@ -49,6 +51,14 @@ const guestRouter = createBrowserRouter([
             {
                 path:'/hotels/:city/:hotelname',
                 element: <HotelsDetail/>
+            },
+            {
+                path:'reviews',
+                element: <Reviews/>
+            },
+            {
+                path:'reviews/:reviewid',
+                element: <ReviewDetails/>
             },
         ]
     },
@@ -98,6 +108,14 @@ const userRouter = createBrowserRouter([
             {
                 path:'mylists',
                 element: <MyList/>
+            },
+            {
+                path:'reviews',
+                element: <Reviews/>
+            },
+            {
+                path:'reviews/:reviewid',
+                element: <ReviewDetails/>
             },
         ]
     },

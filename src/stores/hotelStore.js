@@ -2,57 +2,71 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { GetHotelCountsByCityApi, GetHotelsApi, GetHotelsByCityApi, GetHotelsByNameApi, GetLikedApi, LikeApi, UnLikeApi } from "../api/mainAPI";
 
-const useHotelStore = create( persist((set,get)=>({
+const useHotelStore = create(persist((set, get) => ({
     hotels: [],
+    selectHotel: {},
     searchHotels: [],
     hotelCounts: [],
     myLists: [],
     getAllHotels: async () => {
         const res = await GetHotelsApi()
-        console.log('res', res)
+        // console.log('allhotels', res)
 
-        set({ searchHotels: res.data.hotels, hotels: res.data.hotels })
+        set({ searchHotels: res.data.hotels })
     },
     getHotelsByCity: async (city) => {
         const res = await GetHotelsByCityApi(city)
         // console.log('res',res)
-        set({ hotels: res.data.hotels})
+        set({ hotels: res.data.hotels })
     },
-    // getHotelsByName: async (city,name) => {
-    //     const res = await GetHotelsByNameApi(city,name)
-    //     console.log('res',res)
-    //     set({ hotels: res.data.hotels})
-    // },
+    getHotelsByName: async (city, name, checkin, checkout) => {
+        console.log('startgetbyname',city,name)
+        const queryParams = new URLSearchParams()
+        if (checkin) queryParams.append('checkin', checkin)
+        if (checkout) queryParams.append('checkout', checkout)
+
+        const queryString = queryParams.toString()
+        const url = queryString ? `${name}?${queryString}` : name
+
+        const res = await GetHotelsByNameApi(city, url)
+        console.log('hotelbyname', res)
+        set({ selectHotel: res.data.hotels })
+    },
     getHotelCountsByCity: async () => {
         const res = await GetHotelCountsByCityApi()
         // console.log('res',res)
-        set({ hotelCounts: res.data.hotelCounts})
+        set({ hotelCounts: res.data.hotelCounts })
     },
-    createLike: async (id, hotelid) => {       
-        set((st) => ({
-            hotels: st.hotels.map((hotel) => {
+    createLike: async (id, hotelid) => {
+        set((st) => {
+            const updatedHotels = st.hotels.map((hotel) => {
                 if (hotel.id === hotelid) {
                     return { ...hotel, likes: [...hotel.likes, { userId: id }] };
                 }
                 return hotel;
-            })
-        }));
+            });
+            const updatedSelectHotel = st.selectHotel?.id === hotelid
+                ? { ...st.selectHotel, likes: [...(st.selectHotel.likes || []), { userId: id }] }
+                : st.selectHotel;
+            return { hotels: updatedHotels, selectHotel: updatedSelectHotel };
+        });
         //FLip the order so UI goes first jaa
         const res = await LikeApi(hotelid)
         return res
     },
     unLike: async (id, hotelid) => {
-        set((st) => ({
-            hotels: st.hotels.map((hotel) => {
+        set((st) => {
+            const updatedHotels = st.hotels.map((hotel) => {
                 if (hotel.id === hotelid) {
                     return { ...hotel, likes: hotel.likes.filter((like) => like.userId !== id) };
-                    //"Look at this like. Is the userId on this like different than my current logged-in userId?"
-                    //If Y (it belongs to someone else), it keeps the like in the array.
-                    //If N (it's your), it will delete the like.
                 }
                 return hotel;
-            })
-        }));
+            });
+            const updatedSelectHotel = st.selectHotel?.id === hotelid
+                ? { ...st.selectHotel, likes: (st.selectHotel.likes || []).filter((like) => like.userId !== id) }
+                : st.selectHotel;
+            return { hotels: updatedHotels, selectHotel: updatedSelectHotel };
+        });
 
         const res = await UnLikeApi(hotelid)
         return res
@@ -65,6 +79,6 @@ const useHotelStore = create( persist((set,get)=>({
     },
 
 
-}),{ name: 'hotelState', storage: createJSONStorage( ()=>localStorage )}))
+}), { name: 'hotelState', storage: createJSONStorage(() => localStorage) }))
 
 export default useHotelStore

@@ -8,9 +8,9 @@ function AccountMenu() {
     const logout = useUserStore(st=>st.logout)
     const navigate = useNavigate()
 
-    const btnStyle = 'h-[50px] w-[260px] flex items-center justify-start px-7'
+    const btnStyle = 'h-[50px] w-[260px] flex items-center justify-start px-7 hover:text-primary'
   return (
-    <div className='bg-base-200 w-[260px] h-[550px] rounded-[20px] p-7 flex flex-col justify-between'>
+    <div className='bg-base-200 w-[260px] h-[550px] rounded-[20px] p-7 flex flex-col justify-between '>
         <div className="flex flex-col items-center gap-2 pt-5">
             <ProfilePic imgSrc={user?.profileImg} className="rounded-full h-[115px]"/>
             <h1 className='text-[20px]'>{user.name || 'Pich User'}</h1>

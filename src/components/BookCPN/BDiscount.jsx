@@ -1,17 +1,34 @@
 import { useState } from "react"
 import Swal from "sweetalert2"
 import useBookingStore from "../../stores/bookingStore"
+import useDiscountStore from "../../stores/discountStore"
 
 function BDiscount() {
   const promoCode = useBookingStore(st=>st.promoCode)
   const setPromoCode = useBookingStore(st=>st.setPromoCode)
 
+  const getDiscountByCode = useDiscountStore(st=>st.getDiscountByCode)
+
   const [inputCode, setInputCode] = useState(promoCode || "")
   const isInputValid = inputCode.trim().length > 0;
 
-  const hdlApplyPromo = () => {
-    setPromoCode(inputCode.trim())
-    Swal.fire(`promotion code ${inputCode} has been applied`);
+  const hdlApplyPromo = async () => {
+    try {
+      const code = inputCode.trim()
+      const res = await getDiscountByCode(code)
+
+      if(res.data.discount){
+        setPromoCode(code)
+        Swal.fire(`promotion code ${inputCode} has been applied`);
+      } else{
+        Swal.fire(`promotion code unavailable`);
+      }
+      
+    } catch (error) {
+      console.error(error)
+      Swal.fire(`Something went wrong. Please try again`);
+
+    }
   }
 
   return (

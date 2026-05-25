@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router"
 import GuestHeader from "../components/GuestHeader"
 import Footer from "../components/Footer"
 import { useEffect } from "react";
+import AIchatButton from "../components/AIchatButton";
 
 function Guestlayout() {
   const { pathname } = useLocation();
@@ -17,6 +18,9 @@ function Guestlayout() {
     <div>
       <div className="fixed top-0 left-0 right-0 z-100">
         <GuestHeader/>
+      </div>
+      <div className="fixed bottom-9 right-3 z-100">
+        <AIchatButton/>
       </div>
         <Outlet/>
         <Footer/>

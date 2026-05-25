@@ -5,11 +5,11 @@ import { useParams, useSearchParams } from "react-router"
 import { format } from "date-fns"
 
 function SearchBarNav() {
-    const hotels = useHotelStore(st=>st.hotels)
+    const searchHotels = useHotelStore(st=>st.searchHotels)
     const getAllHotels = useHotelStore(st=>st.getAllHotels)
 
-    const hotelName = hotels.map( hotel => hotel.name)
-    const hotelCity = [...new Set(hotels.map( hotel => hotel.city))]
+    const hotelName = searchHotels.map( hotel => hotel.name)
+    const hotelCity = [...new Set(searchHotels.map( hotel => hotel.city))]
 
     // console.log(hotelName)
     // console.log('hotelCity', hotelCity)

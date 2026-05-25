@@ -3,161 +3,54 @@
 import { motion, AnimatePresence } from "motion/react"
 import { useEffect, useState } from "react"
 import useBookingStore from "../../stores/bookingStore"
-import { differenceInDays, format } from "date-fns"
-import { formatPrice } from "../../utils/formatNum"
-import { DeleteBKSwal } from "../swal/DeleteBKAlert"
-import { useNavigate } from "react-router"
-import { CancelBKSwal } from "../swal/CancelBKAlert"
-import useHotelStore from "../../stores/hotelStore"
+import HistoryCard from "./HistoryCard"
 
 /**
  * ==============   Data   ================
  */
 
 const allIngredients = [
-  { icon: "🍅", label: "Upcoming" },
-  { icon: "🥬", label: "Completed" },
-  { icon: "🧀", label: "Cancelled" },
+  { label: "Upcoming" },
+  { label: "Completed" },
+  { label: "Cancelled" },
 ]
 
-const [tomato, lettuce, cheese] = allIngredients
-const tabs = [tomato, lettuce, cheese]
-
-////COMPONENT
-const HistoryCard = ({booking,sll}) => {
-    const nightCount = (booking.checkInDate && booking.checkOutDate) ? differenceInDays(new Date(booking.checkOutDate), new Date(booking.checkInDate)): 0
-    const deleteOnSubmit = async () => {   
-        try {
-            console.log(booking.id)
-            console.log(typeof(booking.id))
-            await useBookingStore.getState().deleteSpecificBooking(booking.id)
-            console.log(`Delete Booking NO.${booking.id} successfully `)
-            await useBookingStore.getState().getAllBookingsFromThisUser()
-
-        } catch (error) {
-            console.error("Delete process failed", error)
-        }
-    }
-
-    const navigate = useNavigate()
-    const createSlug = (text) => {
-        return text?.toLowerCase().replace(/\s+/g, '-')
-    }
-
-    const cancelOnSubmit = async () => {   
-        try {
-            console.log(booking.id)
-            // console.log(typeof(booking.id))
-            await useBookingStore.getState().cancelBookingByUser(booking.id)
-            console.log(`Delete Booking NO.${booking.id} successfully `)
-            await useBookingStore.getState().getAllBookingsFromThisUser()
-
-        } catch (error) {
-            console.error("Delete process failed", error)
-        }
-    }
-
-    // const getHotelsByName = useHotelStore(st=>st.getHotelsByName)
-
-    const hdlBookingAgain = async () => {
-      // await getHotelsByName(booking?.room?.hotel?.city, booking?.room?.hotel?.name)
-      await useHotelStore.getState().getHotelsByCity(booking?.room?.hotel?.city)
-
-      navigate(`/hotels/${createSlug(booking?.room?.hotel?.city)}/${createSlug(booking?.room?.hotel?.name)}`)
-    }
-
-
-    return (
-        <div className="w-full h-full bg-base-200 flex flex-col gap-4 p-3 border border-neutral/50 rounded-[12px] ">
-            <div className="">
-                <div className="flex justify-between border-b pb-3 text-[14px]">
-                    <div className="flex font-[Whitney-Book] gap-4">
-                        <h3>Booking No.{booking.id}</h3>
-                        <h3>Booking Date: {format(booking.bookingDate, 'MMMM dd, yyyy')}</h3>
-                    </div>
-                    <p className={booking.bookingStatus === 'CONFIRMED' ? 'text-success': booking.bookingStatus ===  'WAITING' ? 'text-warning': 'text-error' }>{booking.bookingStatus}</p>
-                </div>
-
-                <div className="flex justify-between gap-4 py-3">
-                    <div className="w-[100px] h-[115px] rounded-[6px] overflow-hidden">
-                        <img src={booking?.room?.hotel?.hotelImg?.img1} alt="hotelimg" className="w-full h-full object-cover"/>
-                    </div>
-                    <div className="w-[420px] flex flex-col justify-between py-1">
-                        <div className="flex justify-between text-[18px]">
-                            <h1>{booking.room.hotel.name}</h1>
-                            <h1>{formatPrice(booking.finalPrice,2)}</h1>
-                        </div>
-                        <div className="bg-base-100 p-2 flex justify-between font-[Whitney-Medium] text-[14px]">
-                            <div className="w-[160px]">
-                                <h3>{format(booking.checkInDate, 'MMMM dd, yyyy')} - {format(booking.checkOutDate, 'MMMM dd, yyyy')}</h3>
-                                <p className="font-[Whitney-Light]">{nightCount} night{nightCount<1 ? 's' : ''}</p>
-                            </div>
-                            <div className="w-fit">
-                                <h3>{booking.bookingGuests?.[0]?.firstName} {booking.bookingGuests?.[0]?.lastName}</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {sll === 'Upcoming' && (
-                    <div className="flex justify-end gap-4">
-                        <button onClick={() => CancelBKSwal({booking, cancelOnSubmit})} className="border border-primary px-4 py-1.5 rounded-[8px] text-primary">Cancel</button>
-                    </div>
-                )}
-                
-                {sll === 'Completed' && (
-                    <div className="flex justify-end gap-4">
-                        <button onClick={() => DeleteBKSwal({booking, deleteOnSubmit})} className="border border-primary px-4 py-1.5 rounded-[8px] text-primary">Delete</button>
-                        <button onClick={() => hdlBookingAgain() } className="bg-primary px-4 py-1.5 rounded-[8px] text-white">Book Again</button>
-                    </div>
-                )}
-                
-                {sll === 'Cancelled' && (
-                    <div className="flex justify-end gap-4">
-                        <button onClick={() => DeleteBKSwal({booking, deleteOnSubmit})} className="border border-primary px-4 py-1.5 rounded-[8px] text-primary">Delete</button>
-                        <button onClick={() => hdlBookingAgain() } className="bg-primary px-4 py-1.5 rounded-[8px] text-white">Book Again</button>
-                    </div>
-                )}
-                
-            </div>
-
-        </div>
-    )
-}
-
-
-
+const [Upcoming, Completed, Cancelled] = allIngredients
+const tabs = [Upcoming, Completed, Cancelled]
 
 ////MOTION COMPONENT
 export default function SharedLayoutAnimation() {
-    const [selectedTab, setSelectedTab] = useState(tabs[0])
-    const booking = useBookingStore(st=>st.booking)
-    const getAllBookingsFromThisUser = useBookingStore(st=>st.getAllBookingsFromThisUser)
+  const [selectedTab, setSelectedTab] = useState(tabs[0])
+  const booking = useBookingStore(st => st.booking)
+  const getAllBookingsFromThisUser = useBookingStore(st => st.getAllBookingsFromThisUser)
 
-    // const get
-    // const [book, setBook] = useState([])
+  // const get
+  // const [book, setBook] = useState([])
 
-    useEffect(()=>{
-        // console.log('bbbbb')
-        getAllBookingsFromThisUser()
-        // console.log('aaaa')
-        // setBook(booking)
-    },[getAllBookingsFromThisUser])
+  useEffect(() => {
+    // console.log('bbbbb')
+    getAllBookingsFromThisUser()
+    // console.log('aaaa')
+    // setBook(booking)
+  }, [getAllBookingsFromThisUser])
 
 
-    const bookingArray = Array.isArray(booking) ? booking : (booking ? [booking] : []);
+  // const bookingArray = Array.isArray(booking) ? booking : (booking ? [booking] : []);
 
-    // console.log('booking', booking)
-    // console.log('TO.booking', Array.isArray(booking))
+  // console.log('booking', booking)
+  // console.log('TO.booking', Array.isArray(booking))
 
-    const today = new Date();
-    today.setHours(0,0,0,0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-    const upcomingTrip = bookingArray.filter(item=> new Date(item.checkInDate)>= today  && new Date(item.checkOutDate)>= today && item.bookingStatus !== "CANCELLED" )
-    const completedTrip = bookingArray.filter(item=> new Date(item.checkInDate)<= today  && new Date(item.checkOutDate)<= today && item.bookingStatus !== "CANCELLED" )
-    const cancelledTrip = bookingArray.filter(item=> item.bookingStatus === "CANCELLED" )
-    // console.log('upcomingTrip', upcomingTrip)
-    // console.log('selectedTab.label', selectedTab.label)
+  const upcomingTrip = booking.filter(item => new Date(item.checkInDate) >= today && new Date(item.checkOutDate) >= today && item.bookingStatus !== "CANCELLED")
+  const completedTrip = booking.filter(item => new Date(item.checkInDate) <= today && new Date(item.checkOutDate) <= today && item.bookingStatus !== "CANCELLED")
+  const cancelledTrip = booking.filter(item => item.bookingStatus === "CANCELLED")
+  // const upcomingTrip = bookingArray.filter(item => new Date(item.checkInDate) >= today && new Date(item.checkOutDate) >= today && item.bookingStatus !== "CANCELLED")
+  // const completedTrip = bookingArray.filter(item => new Date(item.checkInDate) <= today && new Date(item.checkOutDate) <= today && item.bookingStatus !== "CANCELLED")
+  // const cancelledTrip = bookingArray.filter(item => item.bookingStatus === "CANCELLED")
+  // console.log('upcomingTrip', upcomingTrip)
+  // console.log('selectedTab.label', selectedTab.label)
 
   return (
     <div style={container}>
@@ -198,24 +91,30 @@ export default function SharedLayoutAnimation() {
             transition={{ duration: 0.2 }}
           >
             {selectedTab.label === "Upcoming" && (
-                <div className="w-full h-full flex flex-col gap-4 pt-4">
-                    {upcomingTrip.length > 0 ? upcomingTrip.map(item => <HistoryCard key={item.id} booking={item} sll={selectedTab.label}/>)
-                    : "No Upcoming Trip"}
-                </div>
+              <div className="w-full h-full flex flex-col gap-4 pt-4">
+                {upcomingTrip.length > 0 ? upcomingTrip.map(item => <HistoryCard key={item.id} booking={item} sll={selectedTab.label} />)
+                  : (<p className="mt-24 text-center text-neutral/60 font-[Whitney-Medium] text-[15px]">
+                        No Upcoming Trip.
+                    </p>)}
+              </div>
             )}
 
             {selectedTab.label === "Completed" && (
-                <div className="w-full h-full flex flex-col gap-4 pt-4">
-                    {completedTrip.length > 0 ? completedTrip.map(item => <HistoryCard key={item.id} booking={item} sll={selectedTab.label}/>)
-                    : "No Completed Trip"}
-                </div>
+              <div className="w-full h-full flex flex-col gap-4 pt-4">
+                {completedTrip.length > 0 ? completedTrip.map(item => <HistoryCard key={item.id} booking={item} sll={selectedTab.label} />)
+                  : (<p className="mt-24 text-center text-neutral/60 font-[Whitney-Medium] text-[15px]">
+                        No Completed Trip.
+                    </p>)}
+              </div>
             )}
-            
+
             {selectedTab.label === "Cancelled" && (
-                <div className="w-full h-full flex flex-col gap-4 pt-4">
-                    {cancelledTrip.length > 0 ? cancelledTrip.map(item => <HistoryCard key={item.id} booking={item} sll={selectedTab.label}/>)
-                    : "No Cancelled Trip"}
-                </div>
+              <div className="w-full h-full flex flex-col gap-4 pt-4">
+                {cancelledTrip.length > 0 ? cancelledTrip.map(item => <HistoryCard key={item.id} booking={item} sll={selectedTab.label} />)
+                  : (<p className="mt-24 text-center text-neutral/60 font-[Whitney-Medium] text-[15px]">
+                        No Cancelled Trip.
+                    </p>)}
+              </div>
             )}
 
           </motion.div>
@@ -235,7 +134,7 @@ export default function SharedLayoutAnimation() {
 
 const container = {
   width: "570px",
-//   height: "fit",
+  //   height: "fit",
   minHeight: 300,
   // borderRadius: 10,
   background: "#FBF9F6",
@@ -248,10 +147,10 @@ const container = {
 
 const nav = {
   background: "#FBF9F6",
-//   padding: "5px 5px 0",
-//   borderRadius: "10px",
-//   borderBottomLeftRadius: 0,
-//   borderBottomRightRadius: 0,
+  //   padding: "5px 5px 0",
+  //   borderRadius: "10px",
+  //   borderBottomLeftRadius: 0,
+  //   borderBottomRightRadius: 0,
   borderBottom: "1px solid #999999",
   height: 44
 }
@@ -274,12 +173,12 @@ const tabsContainer = {
 
 const tab = {
   ...tabsStyles,
-//   borderRadius: 5,
-//   borderBottomLeftRadius: 0,
-//   borderBottomRightRadius: 0,
+  //   borderRadius: 5,
+  //   borderBottomLeftRadius: 0,
+  //   borderBottomRightRadius: 0,
   width: "100%",
   height: "100%",
-//   padding: "0px 20px 0px",
+  //   padding: "0px 20px 0px",
   position: "relative",
   cursor: "pointer",
   display: "flex",

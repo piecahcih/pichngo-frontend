@@ -50,7 +50,10 @@ function TravelersCard() {
                     {travelerInfo?.map(tvl => (
                         <TravelerInfoCard key={tvl.id} tvl={tvl} />
                     ))}
-                    {/* {travelerInfo.length < 1 && "Add your traveler info"} */}
+                    {travelerInfo.length < 1 && (          
+                      <p className="mt-14 mb-19 text-center text-neutral/60 font-[Whitney-Medium] text-[15px]">
+                        You haven't add any traveler info.
+                      </p>)}
                     {/* <pre>{JSON.stringify(travelerInfo, null, 2)}</pre> */}
                 </div>
             </div>

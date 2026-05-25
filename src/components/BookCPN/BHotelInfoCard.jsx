@@ -1,9 +1,10 @@
 import { CalendarIcon, DoorIcon, InfoIcon, PeopleIcon, StarLogo } from '../../icons'
 import { differenceInDays, format } from 'date-fns'
 import useHotelStore from '../../stores/hotelStore'
-import { formatPrice } from '../../utils/formatNum'
+import { useFormatPrice } from '../../utils/formatNum'
 
 function BHotelInfoCard({roomInfo, Info}) {
+    const formatPrice = useFormatPrice()
     const { currentHotel, currentRoom } = roomInfo
     const { checkin, checkout, room, guest, nightCount} = Info
 
@@ -11,7 +12,7 @@ function BHotelInfoCard({roomInfo, Info}) {
     <div className='bg-base-200 w-[500px] h-fit rounded-[12px] p-6 flex flex-col'>
         <div className="flex gap-6">
             <div className="w-[100px] h-[100px] rounded-[4px] overflow-hidden">
-                <img src={currentHotel.hotelImg.img1} alt="hotelImg" className='w-full h-full object-cover'/>  
+                <img src={currentHotel?.hotelImg.img1} alt="hotelImg" className='w-full h-full object-cover'/>  
             </div>
             <div className="flex flex-col">
                 <h1 className="text-[24px]">{currentHotel?.name}</h1>

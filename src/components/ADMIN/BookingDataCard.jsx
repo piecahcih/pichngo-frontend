@@ -1,9 +1,10 @@
 import { differenceInDays, format } from "date-fns"
-import { formatPrice } from "../../utils/formatNum"
+import { useFormatPrice } from "../../utils/formatNum"
 import useAdminStore from "../../stores/adminStore"
 import { AdminUpdateBKSwal } from "../swal/ADMINUpdateBKst"
 
 function BookingDataCard({booking}) {
+    const formatPrice = useFormatPrice()
     const nightCount = (booking.checkInDate && booking.checkOutDate) ? differenceInDays(new Date(booking.checkOutDate), new Date(booking.checkInDate)): 0
     const updateStatusOnSubmit = async() => {
         try {

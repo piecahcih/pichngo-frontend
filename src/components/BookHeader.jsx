@@ -2,11 +2,17 @@ import { NavLink } from "react-router"
 import { HamburgerNavLogo, HeartLogo, LanguageLogo } from "../icons"
 import SearchBarNav from "./SearchBarNav"
 import useUserStore from "../stores/userStore"
+import useCurrencyStore from "../stores/currencyStore"
 import ProfilePic from "./profileCPN/ProfilePic"
 
 function BookHeader() {
   const user = useUserStore(st=>st.user)
   const logout = useUserStore(st=>st.logout)
+  const currentCurrency = useCurrencyStore(st=>st.currency)
+  const setCurrency = useCurrencyStore(st=>st.setCurrency)
+  const rates = useCurrencyStore(st=>st.rates)
+  const symbols = useCurrencyStore(st=>st.symbols)
+
   return (
     <div className="flex justify-between items-center bg-base-200 h-[80px] px-10">
         <NavLink to="/"><div className="text-[#D44A1B] text-[32px] tracking-[2.8px]">Pich & Go</div></NavLink>
@@ -16,10 +22,24 @@ function BookHeader() {
         </div> */}
 
         <div className="flex gap-10 text-neutral items-center">
-          <div className="flex items-center">
-            <LanguageLogo className="h-5"/>
-            <div className="divider divider-horizontal mx-0.5 -my-2 "></div>
-            <p>THB</p>
+          <div className="dropdown dropdown-bottom dropdown-end flex items-center">
+            <div tabIndex={0} role="button" className="flex items-center cursor-pointer hover:opacity-80 transition-opacity">
+              <LanguageLogo className="h-5"/>
+              <div className="divider divider-horizontal mx-0.5 -my-2 "></div>
+              <p>{currentCurrency}</p>
+            </div>
+            <ul tabIndex={0} className="dropdown-content menu bg-neutral-content rounded-box z-[150] w-36 p-2 shadow-lg mt-2 text-neutral">
+              {Object.keys(rates).map((cur) => (
+                <li key={cur}>
+                  <a 
+                    className={currentCurrency === cur ? "active font-bold text-primary" : ""} 
+                    onClick={() => setCurrency(cur)}
+                  >
+                    {cur} ({symbols[cur]})
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="border rounded-[12px] border-base-content p-2 bg-neutral-content">

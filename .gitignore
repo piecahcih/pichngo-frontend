@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 src/pages/oldpage
+
+.env
