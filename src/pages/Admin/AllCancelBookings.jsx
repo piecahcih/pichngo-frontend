@@ -10,9 +10,9 @@ function AllCancelBookings() {
   const cancelBooking = bookings.filter( booking => booking.bookingStatus === 'CANCELLED')
 
   useEffect(()=>{
-    console.log('peach')
+    // console.log('peach')
     adminGetAllBookingsfromDatabase()
-    console.log('peachja')
+    // console.log('peachja')
   },[adminGetAllBookingsfromDatabase])
 
   return (

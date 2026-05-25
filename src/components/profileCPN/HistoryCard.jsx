@@ -28,8 +28,8 @@ const HistoryCard = ({ booking, sll }) => {
 
   const modalId = `review-modal-${booking.id}`
 
-  console.log('myReviews', myReviews)
-  console.log('booking', booking)
+  // console.log('myReviews', myReviews)
+  // console.log('booking', booking)
 
   useEffect(() => {
     const checkReview = () => {

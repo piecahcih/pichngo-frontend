@@ -21,7 +21,7 @@ const useBookingStore = create(persist((set,get)=>({
     // setTotalPrice: (price) => set({ totalPrice: price }),
     resetPromoCode: () => set({ promoCode: "" }) ,
     setCurrentBooking: (data) => {
-        console.log('CurrentBooking', data)
+        // console.log('CurrentBooking', data)
         set({ currentBooking: data })
     },
     resetCurrentBooking: () => set({ currentBooking: {} }) ,

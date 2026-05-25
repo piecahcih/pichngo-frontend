@@ -7,14 +7,14 @@ const useRewardStore = create(persist((set) => ({
     userRewards: {},
     getUserRewardsAndTier: async () => {
         const res = await GetUserRewardsAndTierApi()
-        console.log('userRewards', res)
+        // console.log('userRewards', res)
         set({ userRewards: res.data.reward })
         return res
     },
     calculateBookingRewards: async (finalPrice) => {
-        console.log('finalPrice', finalPrice)
+        // console.log('finalPrice', finalPrice)
         const res = await CalculateBookingRewardsApi(finalPrice)
-        console.log('res', res)
+        // console.log('res', res)
         set({ previewRewards: res.data.reward })
     }
 

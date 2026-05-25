@@ -10,9 +10,9 @@ function AllConfirmBookings() {
   const allConfirmBooking = bookings.filter( booking => booking.bookingStatus === 'CONFIRMED')
 
   useEffect(()=>{
-    console.log('peach')
+    // console.log('peach')
     adminGetAllBookingsfromDatabase()
-    console.log('peachja')
+    // console.log('peachja')
   },[adminGetAllBookingsfromDatabase])
   // console.log('bookings', bookings)
 

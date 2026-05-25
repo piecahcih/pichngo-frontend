@@ -10,9 +10,9 @@ function AllWaitingBooking() {
   const allWaitingBooking = bookings.filter( booking => booking.bookingStatus === 'WAITING')
 
   useEffect(()=>{
-    console.log('peach')
+    // console.log('peach')
     adminGetAllBookingsfromDatabase()
-    console.log('peachja')
+    // console.log('peachja')
   },[adminGetAllBookingsfromDatabase])
   // console.log('bookings', bookings)
 

@@ -11,7 +11,7 @@ function RoomCard({room}) {
     const user = useUserStore(st=>st.user)
     const navigate = useNavigate()
     const[searchParams] = useSearchParams()
-    console.log('room', room)
+    // console.log('room', room)
 
     const roomAmn = searchParams.get("room")
     const checkin = searchParams.get("checkin")

@@ -42,7 +42,7 @@ function Home() {
 
   const discounts = useDiscountStore(st => st.discounts)
   const getDiscounts = useDiscountStore(st => st.getDiscounts)
-  console.log('discounts', discounts)
+  // console.log('discounts', discounts)
 
   const reviews = useReviewStore(st => st.reviews)
   const getReviews = useReviewStore(st => st.getReviews)

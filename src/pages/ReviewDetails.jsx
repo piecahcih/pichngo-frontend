@@ -3,13 +3,18 @@ import useReviewStore from "../stores/reviewStore"
 import { useEffect, useMemo } from "react"
 import defaultImg from "../assets/default-profilepic.jpg"
 import { formatPrice } from "../utils/formatNum"
+import { addDays, format } from "date-fns"
 
 function ReviewDetails() {
     const selectReview = useReviewStore(st => st.selectReview)
     const getReviewById = useReviewStore(st => st.getReviewById)
 
+    const today = new Date();
+    const checkinStr = format(today, "yyyy-MM-dd");             
+    const checkoutStr = format(addDays(today, 1), "yyyy-MM-dd");
+
     const { reviewid } = useParams()
-    console.log('reviews', selectReview)
+    // console.log('reviews', selectReview)
 
     useEffect(() => {
         if (reviewid) {
@@ -119,7 +124,7 @@ function ReviewDetails() {
                         <div>
                             <h2 className="text-[18px] font-[Whitney-Semibold] mb-1">Mention in this review</h2>
 
-                            <NavLink to={`/hotels/${createSlug(selectReview.hotel?.city)}/${createSlug(selectReview.hotel?.name)}`}>
+                            <NavLink to={`/hotels/${createSlug(selectReview.hotel?.city)}/${createSlug(selectReview.hotel?.name)}?checkin=${checkinStr}&checkout=${checkoutStr}&room=1&adult=1`}>
                                 <div className="border border-neutral/50 p-3 flex gap-4">
                                     <img src={selectReview.hotel?.hotelImg?.img1} alt="hotelImg" className="w-30 h-30 object-cover" />
                                     <div>

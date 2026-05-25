@@ -9,7 +9,7 @@ const useUserStore = create(persist((set, get) => ({
     rememberMe: false,
     login: async (body) => {
         const res = await LoginApi(body)
-        console.log("user",res)
+        // console.log("user",res)
         set({ token: res.data.token, user: res.data.user, rememberMe: body.rememberMe })
         
         await get().getTravelerInfo()

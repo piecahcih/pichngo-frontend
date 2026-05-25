@@ -54,7 +54,7 @@ function HotelsDetail() {
         getHotelsByName(city, hotelname, checkin, checkout)
     },[getHotelsByName, city, hotelname, searchParams])
 
-    console.log('selectHotel', selectHotel)
+    // console.log('selectHotel', selectHotel)
 
     // const selectHotel = 
     //     hotels?.find(h => createSlug(h.name) === hotelname) || myLists?.find(h => createSlug(h.name) === hotelname)

@@ -10,7 +10,7 @@ function BPayment() {
     const formatPrice = useFormatPrice()
     const paymentMethod = useBookingStore(st=>st.paymentMethod)
     const setPaymentMethod = useBookingStore(st=>st.setPaymentMethod)
-    console.log('paymentMethod', paymentMethod)
+    // console.log('paymentMethod', paymentMethod)
     const totalPrice = useBookingStore(st=>st.totalPrice)
 
     const hdlChange = (name) => {
