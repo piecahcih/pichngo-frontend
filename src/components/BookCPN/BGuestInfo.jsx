@@ -157,7 +157,7 @@ export default BGuestInfo
 
 
 
-    const InputField = ({ label, value, onChange, onFocus, name, type = "text", placeholder }) => {
+    const InputField = ({ label, value, onChange, onFocus, name, type = "text", placeholder, ...rest }) => {
         return (
             <div className="relative mt-4">
                 {/* The Notched Label */}
@@ -177,6 +177,7 @@ export default BGuestInfo
                     className="w-full border border-gray-300 rounded-[8px] px-4 py-3 text-[18px] 
                     font-[Whitney-Medium] outline-none focus:border-primary transition-colors 
                     placeholder:text-neutral/40 placeholder:font-[Whitney-Book] placeholder:text-[16px]"
+                    {...rest}
                 />
             </div>
         )

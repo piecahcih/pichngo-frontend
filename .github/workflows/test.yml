@@ -1,0 +1,16 @@
+name: Test Pichngo
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 
+      - run: npm ci
+      - run: npm run test:ci 
+      - run: npm run build   
