@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import AIchatButton from "../components/AIchatButton";
 
 function Userlayout() {
@@ -23,8 +23,10 @@ function Userlayout() {
       <div className="fixed bottom-9 right-3 z-100">
         <AIchatButton/>
       </div>
+      <Suspense fallback={<div className="h-screen flex items-center justify-center"><span className="loading loading-spinner loading-lg text-primary"></span></div>}>
         <Outlet/>
-        <Footer/>
+      </Suspense>
+      <Footer/>
     </div>
   )
 }

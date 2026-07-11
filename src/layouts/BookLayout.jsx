@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router"
 import Footer from "../components/Footer"
 import BookHeader from "../components/BookHeader"
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 
 function Booklayout() {
   const { pathname } = useLocation();
@@ -17,7 +17,9 @@ function Booklayout() {
   return (
     <div>
         <BookHeader/>
-        <Outlet/>
+        <Suspense fallback={<div className="h-screen flex items-center justify-center"><span className="loading loading-spinner loading-lg text-primary"></span></div>}>
+          <Outlet/>
+        </Suspense>
         <Footer/>
     </div>
   )

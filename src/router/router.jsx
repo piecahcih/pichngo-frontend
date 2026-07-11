@@ -7,25 +7,25 @@ import Userlayout from "../layouts/Userlayout";
 import Booklayout from "../layouts/BookLayout";
 import AdminLayout from "../layouts/AdminLayout";
 
-import Home from "../pages/Home";
-import Register from "../pages/Register";
-import LogIn from "../pages/LogIn";
-import Profile from "../pages/Profile";
-import MyList from "../pages/MyList";
-import ProfileBookings from "../pages/ProfileBookings";
-import ProfileRewards from "../pages/ProfileRewards";
-import ProfileReviews from "../pages/ProfileReviews";
-import AdminLanding from "../pages/Admin/AdminLanding";
-import Hotels from "../pages/Hotels";
-import HotelsDetail from "../pages/HotelsDetail";
-import BookInfo from "../pages/BookInfo";
-import BookSuccess from "../pages/BookSuccess";
-import ProfileTravelers from "../pages/ProfileTravelers";
-import AllWaitingBookings from "../pages/Admin/AllWaitingBooking";
-import AllCancelBookings from "../pages/Admin/AllCancelBookings";
-import AllConfirmBookings from "../pages/Admin/AllConfirmBookings";
-import ReviewDetails from "../pages/ReviewDetails";
-import Reviews from "../pages/Reviews";
+const Home = lazy(() => import("../pages/Home"));
+const Register = lazy(() => import("../pages/Register"));
+const LogIn = lazy(() => import("../pages/LogIn"));
+const Profile = lazy(() => import("../pages/Profile"));
+const MyList = lazy(() => import("../pages/MyList"));
+const ProfileBookings = lazy(() => import("../pages/ProfileBookings"));
+const ProfileRewards = lazy(() => import("../pages/ProfileRewards"));
+const ProfileReviews = lazy(() => import("../pages/ProfileReviews"));
+const AdminLanding = lazy(() => import("../pages/Admin/AdminLanding"));
+const Hotels = lazy(() => import("../pages/Hotels"));
+const HotelsDetail = lazy(() => import("../pages/HotelsDetail"));
+const BookInfo = lazy(() => import("../pages/BookInfo"));
+const BookSuccess = lazy(() => import("../pages/BookSuccess"));
+const ProfileTravelers = lazy(() => import("../pages/ProfileTravelers"));
+const AllWaitingBookings = lazy(() => import("../pages/Admin/AllWaitingBooking"));
+const AllCancelBookings = lazy(() => import("../pages/Admin/AllCancelBookings"));
+const AllConfirmBookings = lazy(() => import("../pages/Admin/AllConfirmBookings"));
+const ReviewDetails = lazy(() => import("../pages/ReviewDetails"));
+const Reviews = lazy(() => import("../pages/Reviews"));
 
 const guestRouter = createBrowserRouter([
     {

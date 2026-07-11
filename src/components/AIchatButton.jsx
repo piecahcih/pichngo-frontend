@@ -12,9 +12,13 @@ const AIchatButton = () => {
     ]);
     // console.log('chatHistory', chatHistory)
 
-    const today = new Date();
-    const checkinStr = format(today, "yyyy-MM-dd");
-    const checkoutStr = format(addDays(today, 1), "yyyy-MM-dd");
+    const { checkinStr, checkoutStr } = React.useMemo(() => {
+        const today = new Date();
+        return {
+            checkinStr: format(today, "yyyy-MM-dd"),
+            checkoutStr: format(addDays(today, 1), "yyyy-MM-dd")
+        };
+    }, []);
 
     const [isLoading, setIsLoading] = useState(false);
     const scrollRef = useRef(null);
@@ -120,6 +124,7 @@ const AIchatButton = () => {
                                             <img
                                                 src={chat.hotel.hotelImg?.[0]?.img1}
                                                 alt={chat.hotel.name}
+                                                loading="lazy"
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                             />
                                             <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-[10px] font-bold text-primary shadow-sm">
