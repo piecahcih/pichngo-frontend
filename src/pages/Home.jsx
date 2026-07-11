@@ -9,7 +9,7 @@ import KrabiImg from '../assets/cityimg/Krabi.jpg'
 import KhaoyaiImg from '../assets/cityimg/Nakhon Ratchasima.jpg'
 import PhuketImg from '../assets/cityimg/Phuket.jpg'
 import SuratImg from '../assets/cityimg/Suratthani.jpg'
-import { animate, motion, useMotionValue, useMotionValueEvent, useScroll} from "motion/react"
+import { animate, motion, useMotionValue, useMotionValueEvent, useScroll } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import useHotelStore from '../stores/hotelStore'
 import useDiscountStore from '../stores/discountStore'
@@ -142,7 +142,7 @@ function Home() {
   // console.log('clickDataHome', clickData)
 
   const filterReviews = reviews.filter(review => review.reviewImg != null)
-  console.log('filterReviews', filterReviews)
+  // console.log('filterReviews', filterReviews)
 
   return (
     <div className="bg-white min-h-screen min-w-screen flex flex-col">

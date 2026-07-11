@@ -20,7 +20,7 @@ const useHotelStore = create(persist((set, get) => ({
         set({ hotels: res.data.hotels })
     },
     getHotelsByName: async (city, name, checkin, checkout) => {
-        console.log('startgetbyname',city,name)
+        // console.log('startgetbyname',city,name)
         const queryParams = new URLSearchParams()
         if (checkin) queryParams.append('checkin', checkin)
         if (checkout) queryParams.append('checkout', checkout)
@@ -29,7 +29,7 @@ const useHotelStore = create(persist((set, get) => ({
         const url = queryString ? `${name}?${queryString}` : name
 
         const res = await GetHotelsByNameApi(city, url)
-        console.log('hotelbyname', res)
+        // console.log('hotelbyname', res)
         set({ selectHotel: res.data.hotels })
     },
     getHotelCountsByCity: async () => {

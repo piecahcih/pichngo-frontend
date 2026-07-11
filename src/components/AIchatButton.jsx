@@ -10,10 +10,10 @@ const AIchatButton = () => {
     const [chatHistory, setChatHistory] = useState([
         { role: 'ai', text: 'Welcome to Pich & Go. I am Pichy, your dedicated concierge. How may I assist you with your luxury travel plans today?' }
     ]);
-    console.log('chatHistory', chatHistory)
+    // console.log('chatHistory', chatHistory)
 
     const today = new Date();
-    const checkinStr = format(today, "yyyy-MM-dd");             
+    const checkinStr = format(today, "yyyy-MM-dd");
     const checkoutStr = format(addDays(today, 1), "yyyy-MM-dd");
 
     const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +40,7 @@ const AIchatButton = () => {
 
         try {
             const response = await mainAPI.post('/ai', { message: userMsg.text });
-            
+
             let aiData;
             try {
                 // Remove markdown code blocks if AI included them
@@ -84,7 +84,7 @@ const AIchatButton = () => {
                                 </div>
                             </div>
                         </div>
-                        <button 
+                        <button
                             onClick={() => setIsOpen(false)}
                             className="p-2 hover:bg-white/10 rounded-full transition-colors"
                         >
@@ -93,32 +93,32 @@ const AIchatButton = () => {
                     </div>
 
                     {/* Message Area */}
-                    <div 
+                    <div
                         ref={scrollRef}
                         className="flex-1 overflow-y-auto p-5 space-y-4 scrollbar-hide"
                     >
                         {chatHistory.map((chat, index) => (
-                            <div 
-                                key={index} 
+                            <div
+                                key={index}
                                 className={`flex ${chat.role === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
                                 {chat.text ? (
                                     <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm
-                                        ${chat.role === 'user' 
-                                            ? 'bg-[#e5945e] text-white rounded-tr-none' 
+                                        ${chat.role === 'user'
+                                            ? 'bg-[#e5945e] text-white rounded-tr-none'
                                             : 'bg-white text-neutral-800 border border-neutral-100 rounded-tl-none'}`}
                                     >
                                         {chat.text}
                                     </div>
                                 ) : chat.hotel ? (
-                                    <Link 
+                                    <Link
                                         to={`/hotels/${createSlug(chat.hotel.city)}/${createSlug(chat.hotel.name)}?checkin=${checkinStr}&checkout=${checkoutStr}&room=1&adult=1`}
                                         onClick={() => setIsOpen(false)}
                                         className="w-[85%] bg-white border border-neutral-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all group"
                                     >
                                         <div className="relative h-32 overflow-hidden">
-                                            <img 
-                                                src={chat.hotel.hotelImg?.[0]?.img1} 
+                                            <img
+                                                src={chat.hotel.hotelImg?.[0]?.img1}
                                                 alt={chat.hotel.name}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                             />
@@ -129,7 +129,7 @@ const AIchatButton = () => {
                                         <div className="p-3">
                                             <div className="flex justify-between items-start mb-1">
                                                 <h4 className="font-bold text-neutral-900 text-sm leading-tight">{chat.hotel.name}</h4>
-                                                <svg className="w-4 h-4 text-primary shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                                <svg className="w-4 h-4 text-primary shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                                             </div>
                                             <p className="text-[10px] text-neutral-400 uppercase tracking-widest mb-2">{chat.hotel.city}</p>
                                             <p className="text-[11px] text-neutral-600 line-clamp-2 italic">"{chat.hotel.details}"</p>
@@ -152,7 +152,7 @@ const AIchatButton = () => {
                     </div>
 
                     {/* Input Bar */}
-                    <form 
+                    <form
                         onSubmit={handleSendMessage}
                         className="p-4 bg-white/50 border-t border-neutral-100"
                     >
@@ -164,7 +164,7 @@ const AIchatButton = () => {
                                 placeholder="Consult your concierge..."
                                 className="w-full bg-white border border-neutral-200 rounded-full py-3 pl-5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all placeholder:text-neutral-400 font-sans"
                             />
-                            <button 
+                            <button
                                 type="submit"
                                 disabled={!message.trim() || isLoading}
                                 className={`absolute right-1.5 p-2 rounded-full transition-all ${message.trim() && !isLoading ? 'bg-primary text-white hover:scale-105 shadow-md shadow-primary/20' : 'bg-neutral-100 text-neutral-400'}`}
@@ -185,7 +185,7 @@ const AIchatButton = () => {
                 {isOpen ? (
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 ) : (
-                    <ChatBotIcon className="w-8"/>
+                    <ChatBotIcon className="w-8" />
                 )}
             </button>
         </div>

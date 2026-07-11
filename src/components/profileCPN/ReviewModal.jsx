@@ -55,7 +55,7 @@ const ReviewModal = ({ booking, modalId, onReviewCreated }) => {
 
     try {
       const reviewImgUrl = await uploadCloud(selectedFile)
-      console.log("reviewImgUrl:", reviewImgUrl)
+      // console.log("reviewImgUrl:", reviewImgUrl)
       setImgUrl(reviewImgUrl)
       setImgPreview(URL.createObjectURL(selectedFile))
 
